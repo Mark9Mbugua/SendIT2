@@ -1,6 +1,5 @@
 from flask import Flask, Blueprint
 from .api.v1 import v1
-from instance.config import app_config
 
 
 def make_app(config_name):
