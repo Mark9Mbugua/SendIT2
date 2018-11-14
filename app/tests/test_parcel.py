@@ -16,7 +16,8 @@ class TestParcel(unittest.TestCase):
 			'destination' 	: "Wendani",
 			'consignee_name' : "Mark Mbugua",
 			'consignee_no' 	: "0712340908",
-			'order_status' : "order_status"
+			'order_status' : "order_status",
+            'user_id' : 1
 		}	
 
 	def test_post_parcel(self):
@@ -38,7 +39,7 @@ class TestParcel(unittest.TestCase):
 		result = self.client.get('/api/v1/parcels/1')
 		self.assertEqual(result.status_code, 200)
 		self.assertIn('Leather Sofa', str(result.data))
-        
+
 
 	def tearDown(self):
 		pass

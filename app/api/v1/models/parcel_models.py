@@ -7,7 +7,7 @@ class Parcel():
 
 		self.parcels = parcels
 
-	def hold(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, user_id):
+	def hold(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, user_id):
 		order = {
 			'parcel_id' : len(self.parcels) + 1,
 			'parcel_name' 	: parcel_name,
