@@ -29,7 +29,9 @@ class Parcel():
 
 	#get one parcel
 	def getparcel(self, parcel_id):
-		pass
+		for parcel in self.parcels:
+			if parcel['parcel_id'] == parcel_id:
+				return parcel
 
 	
 
