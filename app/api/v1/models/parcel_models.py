@@ -36,7 +36,10 @@ class Parcel():
 	
 
 	def cancelparcel(self, parcel_id):
-		pass
+		for parcel in self.parcels:
+			if parcel['parcel_id'] == parcel_id:
+				parcel['order_status'] = "Cancelled"
+				return self.getparcel(parcel_id)
 
 	#get users parcel
 	def getuserparcels(self, user_id):
