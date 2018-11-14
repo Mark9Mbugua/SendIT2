@@ -43,7 +43,10 @@ class Parcel():
 
 	#get users parcel
 	def getuserparcels(self, user_id):
-		pass
+		for parcel in self.parcels:
+			if parcel['user_id'] == user_id:
+				return parcel
+
 
 
 
