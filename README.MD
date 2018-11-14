@@ -1,6 +1,6 @@
 # SendIt API
 
-[![Build Status](https://travis-ci.org/Mark9Mbugua/SendIT2.svg?branch=(ch-add-travisci-#161952570)](https://travis-ci.org/Mark9Mbugua/SendIT2
+[![Build Status](https://travis-ci.org/Mark9Mbugua/SendIT2.svg?branch=ch-add-travisci-%23161952570)](https://travis-ci.org/Mark9Mbugua/SendIT2)
 
 
 
