@@ -25,7 +25,7 @@ class Parcel():
 
 	# get all parcels
 	def getparcels(self):
-		pass
+	    return self.parcels
 
 	#get one parcel
 	def getparcel(self, parcel_id):

@@ -29,9 +29,14 @@ class ParcelView(Resource, Parcel):
                 'Data': result
             }), 201)
 
-    def get(self):
-                
-        pass
+    def get(self):        
+        parcels = self.pac.getparcels()
+
+        return make_response(jsonify(
+                {
+                    'Response': "Parcels Ready",
+                    'Parcel Request': parcels 
+                }), 200)
 
 class ParcelList(Resource, Parcel):
 
