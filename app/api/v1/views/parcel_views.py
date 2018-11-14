@@ -63,4 +63,11 @@ class ParcelList(Resource, Parcel):
 
     
     def put(self, parcel_id):
-       pass
+        p_id = int(parcel_id)
+        parcel = self.pac.cancelparcel(p_id) 
+        return make_response(jsonify(
+                {
+                    'Response': "Order Status Updated",
+                    'Data': parcel
+                }), 200)         
+
