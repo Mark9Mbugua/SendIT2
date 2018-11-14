@@ -1,5 +1,9 @@
 # SendIt API
 
+[![Build Status](https://travis-ci.org/Mark9Mbugua/SendIT2.svg?branch=(ch-add-travisci-#161952570)](https://travis-ci.org/Mark9Mbugua/SendIT2
+
+
+
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.
 
 
