@@ -46,7 +46,20 @@ class ParcelList(Resource, Parcel):
 
 
     def get(self, parcel_id):
-        pass
+        p_id = int(parcel_id)
+        parcel = self.pac.getparcel(p_id) 
+
+        if parcel is not None:
+            return make_response(jsonify(
+                {
+                    'Response': "Parcel is Ready",
+                    'Data': parcel
+                }), 200)
+        return make_response(jsonify(
+            {
+                "Status": "Not Found"
+            }
+        ))
 
     
     def put(self, parcel_id):
