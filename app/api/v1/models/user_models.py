@@ -22,11 +22,28 @@ class User():
 
     #get all users
     def getusers(self):
-        pass
+        return self.users
         
         #get one user
     def getuser(self, user_name, password):
-        pass
+        for detail in self.users:
 
-    def userexists(self, user_name):
-        pass
+            if detail['user_name'] == user_name:
+
+                if detail['password'] == password:
+
+                    return make_response(jsonify(
+                        {
+                            'Message': "User sign in is successful!"
+                        }), 200)
+
+            return make_response(jsonify(
+                {
+                    'Message': "Enter correct Username and Password"
+                }), 401)
+
+    def userisvalid(self, user_name):
+
+        for user in self.users:
+            if(user['user_name'] == user_name):
+                return True
