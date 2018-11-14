@@ -35,7 +35,7 @@ class ParcelView(Resource, Parcel):
         return make_response(jsonify(
                 {
                     'Response': "Parcels Ready",
-                    'Parcel Request': parcels 
+                    'Data': parcels 
                 }), 200)
 
 class ParcelList(Resource, Parcel):
@@ -70,4 +70,18 @@ class ParcelList(Resource, Parcel):
                     'Response': "Order Status Updated",
                     'Data': parcel
                 }), 200)         
+
+class ParcelsForUser(Resource, Parcel):
+
+    def __init__(self):
+        self.pac =  Parcel()
+    
+    def get(self, user_id):
+        u_id = int(user_id)
+        usrparcels = self.pac.getuserparcels(u_id)
+        return make_response(jsonify(
+                {
+                    'Response': "User's parcels ready",
+                    'Data': usrparcels
+                }), 200)
 
