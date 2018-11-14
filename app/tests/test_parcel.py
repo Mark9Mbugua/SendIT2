@@ -38,9 +38,7 @@ class TestParcel(unittest.TestCase):
 		result = self.client.get('/api/v1/parcels/1')
 		self.assertEqual(result.status_code, 200)
 		self.assertIn('Leather Sofa', str(result.data))
-
-	def test_cancel_parcel(self):
-		pass
+        
 
 	def tearDown(self):
 		pass
