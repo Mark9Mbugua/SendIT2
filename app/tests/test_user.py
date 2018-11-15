@@ -28,7 +28,24 @@ class TestUser(unittest.TestCase):
         result = json.loads(res.data)
         self.assertEqual(result['Message'], "Success")
         self.assertEqual(res.status_code, 201)
+    
+    def test_signup_user_shortusername(self):
+        res = self.client.post('/api/v1/signup', data=json.dumps({'user_name' : "ma", 'password' : "markmain", "user_email" : 'mbuguamark@gmail.com'}), content_type='application/json')
+        result = json.loads(res.data)
+        self.assertEqual(result["Message"], "username must be more than 3 characters")
+        self.assertEqual(res.status_code, 400)
 
+    def test_signup_user_space_password(self):
+        res = self.client.post('/api/v1/signup', data=json.dumps({'user_name' : "marky", 'password' : "markma ", "user_email" : 'mbuguamark@gmail.com'}), content_type='application/json')
+        result = json.loads(res.data)
+        self.assertEqual(result["Message"], "Password should be one word, no spaces")
+        self.assertEqual(res.status_code, 400)
+    
+    def test_signup_user_short_password(self):
+        res = self.client.post('/api/v1/signup', data=json.dumps({'user_name' : "marky", 'password' : "mark", "user_email" : 'mbuguamark@gmail.com'}), content_type='application/json')
+        result = json.loads(res.data)
+        self.assertEqual(result["Message"], "Password should be at least 5 characters")
+        self.assertEqual(res.status_code, 400)
 	        
     def tearDown(self):
         pass

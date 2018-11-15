@@ -40,12 +40,24 @@ class TestParcel(unittest.TestCase):
 		self.assertEqual(result.status_code, 200)
 		self.assertIn('Leather Sofa', str(result.data))
 	
+	def test_get_parcel_bad_id(self):
+		rv = self.client.post('/api/v1/parcels', data=json.dumps(self.data), content_type='application/json')
+		self.assertEqual(rv.status_code, 201)
+		result = self.client.get('/api/v1/parcels/106')
+		self.assertEqual(result.status_code, 400)
+	
 	def test_cancel_parcel(self):
 		rv = self.client.post('/api/v1/parcels',data=json.dumps(self.data), content_type='application/json')
 		self.assertEqual(rv.status_code, 201)
 		result = self.client.put('/api/v1/parcels/1')
 		self.assertEqual(result.status_code, 200)
 		self.assertIn('Cancelled', str(result.data))
+	
+	def test_cancel_parcel_bad_id(self):
+		rv = self.client.post('/api/v1/parcels',data=json.dumps(self.data), content_type='application/json')
+		self.assertEqual(rv.status_code, 201)
+		result = self.client.put('/api/v1/parcels/106')
+		self.assertEqual(result.status_code, 400)
 
 	def test_user_parcels(self):
 		rv = self.client.post('/api/v1/parcels',data=json.dumps(self.data), content_type='application/json')
@@ -53,10 +65,15 @@ class TestParcel(unittest.TestCase):
 		result = self.client.get('/api/v1/users/1/parcels')
 		self.assertEqual(result.status_code, 200)
 		self.assertIn('Leather Sofa', str(result.data))
-
-	def tearDown(self):
-		pass
 	
+	def test_user_parcels_bad_id(self):
+		rv = self.client.post('/api/v1/parcels',data=json.dumps(self.data), content_type='application/json')
+		self.assertEqual(rv.status_code, 201)
+		result = self.client.get('/api/v1/users/300/parcels')
+		self.assertEqual(result.status_code, 400)
+
+
+
 
 if __name__ == '__main__':
 	unittest.main()
