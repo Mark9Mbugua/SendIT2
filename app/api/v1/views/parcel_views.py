@@ -23,11 +23,14 @@ class ParcelView(Resource, Parcel):
 
         result = self.pac.hold(parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, user_id)
 
-        return make_response(jsonify(
-            {
-                'Response': 'Parcel Created',
-                'Data': result
-            }), 201)
+        if result is not None:
+
+            return make_response(jsonify(
+                {
+                    'Response': 'Parcel Created',
+                    'Data': result
+                }), 201)
+                
 
     def get(self):        
         parcels = self.pac.getparcels()
