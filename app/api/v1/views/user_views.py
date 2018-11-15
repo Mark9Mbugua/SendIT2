@@ -16,7 +16,7 @@ class UserView(Resource, User):
             {
                 'Status': "Ok",
                 'Message': "Success",
-                'User Request': users
+                'Data': users
             }), 200)
     
     #create a user
@@ -25,15 +25,21 @@ class UserView(Resource, User):
         user_name = data['user_name']
         user_email = data['user_email']
         password = data['password']
-
-        res = self.usr.hold(user_name, user_email, password)
-
+        res = self.usr.validate_data(user_name, password)
+        if res == True:
+            resp = self.usr.hold(user_name, user_email, password)
+            return make_response(jsonify(
+                {
+                    'Message' : 'Success',
+                    'status'  : 'ok',
+                    'Data' : resp
+                }), 201)
+        
         return make_response(jsonify(
             {
-                'Message' : 'Success',
-                'status'  : 'ok',
-                'Data' : res
-            }), 201)
+                'Message' : res
+                
+            }), 400)
 
 class SpecificUser(Resource, User):
     

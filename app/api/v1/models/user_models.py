@@ -34,16 +34,33 @@ class User():
 
                     return make_response(jsonify(
                         {
-                            'Message': "User sign in is successful!"
+                            'Message': "User is now logged in!"
                         }), 200)
 
             return make_response(jsonify(
                 {
                     'Message': "Enter correct Username and Password"
-                }), 401)
+                }), 400)
 
     def userisvalid(self, user_name):
 
         for user in self.users:
             if(user['user_name'] == user_name):
                 return True
+    
+    def validate_data(self, user_name, password):
+        try:
+            if len(user_name) < 3:
+                return "username must be more than 3 characters"
+            elif len(password) < 5:
+                return "Password should be at least 5 characters"
+            elif " " in password:
+                return "Password should be one word, no spaces"
+            else:
+                return True
+
+        except Exception as error:
+            return make_response(jsonify(
+                {
+                    'Message': "Username or Password dont meet starndards" +str(error)
+                }), 401)

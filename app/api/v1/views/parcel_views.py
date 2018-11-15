@@ -30,16 +30,30 @@ class ParcelView(Resource, Parcel):
                     'Response': 'Parcel Created',
                     'Data': result
                 }), 201)
+         
+        return make_response(jsonify(
+                {
+                    'Response': 'Parcels not found'
+            
+                }), 400)
                 
 
     def get(self):        
         parcels = self.pac.getparcels()
 
+        if parcels is not None:
+
+            return make_response(jsonify(
+                    {
+                        'Response': "Parcels Ready",
+                        'Data': parcels 
+                    }), 200)
+        
         return make_response(jsonify(
-                {
-                    'Response': "Parcels Ready",
-                    'Data': parcels 
-                }), 200)
+            {
+                'Response': 'Parcel not found'
+        
+            }), 400)
 
 class ParcelList(Resource, Parcel):
 
@@ -58,21 +72,31 @@ class ParcelList(Resource, Parcel):
                     'Response': "Parcel is Ready",
                     'Data': parcel
                 }), 200)
+        
         return make_response(jsonify(
             {
-                "Status": "Not Found"
-            }
-        ))
+                'Response': 'Parcel not found'
+        
+            }), 400)
 
     
     def put(self, parcel_id):
         p_id = int(parcel_id)
         parcel = self.pac.cancelparcel(p_id) 
+
+        if parcel is not None:
+
+            return make_response(jsonify(
+                    {
+                        'Response': "Order Status Updated",
+                        'Data': parcel
+                    }), 200)
+        
         return make_response(jsonify(
-                {
-                    'Response': "Order Status Updated",
-                    'Data': parcel
-                }), 200)         
+            {
+                'Response': 'Parcel not found'
+        
+            }), 400)         
 
 class ParcelsForUser(Resource, Parcel):
 
@@ -82,9 +106,17 @@ class ParcelsForUser(Resource, Parcel):
     def get(self, user_id):
         u_id = int(user_id)
         usrparcels = self.pac.getuserparcels(u_id)
-        return make_response(jsonify(
-                {
-                    'Response': "User's parcels ready",
-                    'Data': usrparcels
-                }), 200)
 
+        if usrparcels is not None:        
+        
+            return make_response(jsonify(
+                    {
+                        'Response': "User's parcels ready",
+                        'Data': usrparcels
+                    }), 200)
+       
+        return make_response(jsonify(
+            {
+                'Response': 'Parcel not found'
+        
+            }), 400)
