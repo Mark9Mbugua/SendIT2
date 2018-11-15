@@ -9,12 +9,13 @@ python:
 install:
   - pip install -r requirements.txt
   - pip install pytest
+  - pip install pytest-cov
   - pip install coveralls
 
 
 # command to run tests to run test files
 script:
-  - py.test
+  - py.test --cov
 
 after_success:
   - coveralls
