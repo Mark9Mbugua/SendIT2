@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Mark9Mbugua/SendIT2.svg?branch=ch-add-travisci-%23161952570)](https://travis-ci.org/Mark9Mbugua/SendIT2)
 
-[![Coverage Status](https://coveralls.io/repos/github/Mark9Mbugua/SendIT2/badge.svg?branch=master)](https://coveralls.io/github/Mark9Mbugua/SendIT2?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/Mark9Mbugua/SendIT2/badge.svg?branch=master)](https://coveralls.io/github/Mark9Mbugua/SendIT2?branch=ch-integrate-coveralls-#161991046)
 
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.
 
