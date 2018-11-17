@@ -35,10 +35,10 @@ class TestUser(unittest.TestCase):
         self.assertEqual(result["Message"], "username must be more than 3 characters")
         self.assertEqual(res.status_code, 400)
 
-    def test_signup_user_space_password(self):
+    def test_signup_user_sparcele_password(self):
         res = self.client.post('/api/v1/signup', data=json.dumps({'user_name' : "marky", 'password' : "markma ", "user_email" : 'mbuguamark@gmail.com'}), content_type='application/json')
         result = json.loads(res.data)
-        self.assertEqual(result["Message"], "Password should be one word, no spaces")
+        self.assertEqual(result["Message"], "Password should be one word, no sparceles")
         self.assertEqual(res.status_code, 400)
     
     def test_signup_user_short_password(self):
