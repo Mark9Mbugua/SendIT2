@@ -1,45 +1,37 @@
 from flask_restful import Resource
-from flask import jsonify, make_response, request, sessions
+from flask import jsonify, make_response, request
 
 from ..models.parcel_models import Parcel
 
 
-class ParcelView(Resource, Parcel):
+class ParcelView(Resource):
    
 
     def __init__(self):
-        self.pac = Parcel()
+        self.parcel = Parcel()
 
     def post(self):
         data = request.get_json()
         parcel_name = data['parcel_name']
-        parcel_weight = data['parcel_weight']
+        parcel_weight = data['parcel_weight'] 
         pick_location = data['pick_location']
         destination = data['destination']
         consignee_name = data['consignee_name']
         consignee_no = data['consignee_no']
         order_status = data['order_status']
         user_id = data['user_id']
+        
+        result = self.parcel.create(parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, user_id)
 
-        result = self.pac.hold(parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, user_id)
-
-        if result is not None:
-
-            return make_response(jsonify(
-                {
-                    'Response': 'Parcel Created',
-                    'Data': result
-                }), 201)
-         
         return make_response(jsonify(
-                {
-                    'Response': 'Parcels not found'
-            
-                }), 400)
-                
+            {
+                'Response': 'Parcel Created',
+                'Data': result
+            }), 201)
+        
 
     def get(self):        
-        parcels = self.pac.getparcels()
+        parcels = self.parcel.getParcels()
 
         if parcels is not None:
 
@@ -51,20 +43,20 @@ class ParcelView(Resource, Parcel):
         
         return make_response(jsonify(
             {
-                'Response': 'Parcel not found'
+                'Response': 'Parcels not found'
         
             }), 400)
 
-class ParcelList(Resource, Parcel):
+class ParcelList(Resource):
 
     def __init__(self):
 
-        self.pac = Parcel()
+        self.parcel = Parcel()
 
 
     def get(self, parcel_id):
         p_id = int(parcel_id)
-        parcel = self.pac.getparcel(p_id) 
+        parcel = self.parcel.getParcel(p_id) 
 
         if parcel is not None:
             return make_response(jsonify(
@@ -79,10 +71,15 @@ class ParcelList(Resource, Parcel):
         
             }), 400)
 
-    
+
+class CancelParcel(Resource): 
+
+    def __init__(self):
+        self.parcel = Parcel()
+
     def put(self, parcel_id):
         p_id = int(parcel_id)
-        parcel = self.pac.cancelparcel(p_id) 
+        parcel = self.parcel.cancelParcel(p_id) 
 
         if parcel is not None:
 
@@ -94,29 +91,29 @@ class ParcelList(Resource, Parcel):
         
         return make_response(jsonify(
             {
-                'Response': 'Parcel not found'
+                'Response': 'Parcel to be cancelled not found'
         
-            }), 400)         
+            }), 404)         
 
-class ParcelsForUser(Resource, Parcel):
+class UserParcels(Resource):
 
     def __init__(self):
-        self.pac =  Parcel()
+        self.parcel =  Parcel()
     
     def get(self, user_id):
         u_id = int(user_id)
-        usrparcels = self.pac.getuserparcels(u_id)
+        user_parcels = self.parcel.getUserParcels(u_id)
 
-        if usrparcels is not None:        
-        
+        if user_parcels is not None:  
+                
             return make_response(jsonify(
                     {
                         'Response': "User's parcels ready",
-                        'Data': usrparcels
+                        'Data': user_parcels
                     }), 200)
        
         return make_response(jsonify(
             {
-                'Response': 'Parcel not found'
+                'Response': 'User not found'
         
-            }), 400)
+            }), 404)

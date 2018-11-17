@@ -9,7 +9,7 @@ class User():
         
         self.users = users
 
-    def hold(self, user_name, user_email, password):
+    def create(self, user_name, user_email, password):
         userdetails = {
             'user_id' : len(self.users) + 1,
             'user_name' : user_name,
@@ -21,11 +21,11 @@ class User():
         return self.users
 
     #get all users
-    def getusers(self):
+    def getUsers(self):
         return self.users
         
-        #get one user
-    def getuser(self, user_name, password):
+    #get one user
+    def getUser(self, user_name, password):
         for detail in self.users:
 
             if detail['user_name'] == user_name:
@@ -42,20 +42,20 @@ class User():
                     'Message': "Enter correct Username and Password"
                 }), 400)
 
-    def userisvalid(self, user_name):
+    def userIsValid(self, user_name):
 
         for user in self.users:
             if(user['user_name'] == user_name):
                 return True
     
-    def validate_data(self, user_name, password):
+    def validate_user_data(self, user_name, password):
         try:
             if len(user_name) < 3:
                 return "username must be more than 3 characters"
             elif len(password) < 5:
                 return "Password should be at least 5 characters"
             elif " " in password:
-                return "Password should be one word, no spaces"
+                return "Password should be one word, no sparceles"
             else:
                 return True
 

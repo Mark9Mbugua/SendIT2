@@ -3,14 +3,14 @@ from flask import jsonify, make_response, request
 
 from ..models.user_models import User
 
-class UserView(Resource, User):
+class UserView(Resource):
     
     # initialize the user class
     def __init__(self):
         self.usr = User()
     
     def get(self):
-        users = self.usr.getusers()
+        users = self.usr.getUsers()
 
         return make_response(jsonify(
             {
@@ -25,9 +25,9 @@ class UserView(Resource, User):
         user_name = data['user_name']
         user_email = data['user_email']
         password = data['password']
-        res = self.usr.validate_data(user_name, password)
+        res = self.usr.validate_user_data(user_name, password)
         if res == True:
-            resp = self.usr.hold(user_name, user_email, password)
+            resp = self.usr.create(user_name, user_email, password)
             return make_response(jsonify(
                 {
                     'Message' : 'Success',
@@ -41,7 +41,7 @@ class UserView(Resource, User):
                 
             }), 400)
 
-class SpecificUser(Resource, User):
+class SpecificUser(Resource):
     
     # initialize the user class
     def __init__(self):
@@ -53,16 +53,16 @@ class SpecificUser(Resource, User):
         user_name = data['user_name']
         password = data['password']
 
-        if self.usr.userisvalid(user_name) == True:
+        if self.usr.userIsValid(user_name) == True:
 
-            res = self.usr.getuser(user_name, password)
+            res = self.usr.getUser(user_name, password)
 
             return res
 
         return make_response(jsonify(
             {
                 'Message': 'User not found'
-            }), 401)
+            }), 404)
 
 
         
