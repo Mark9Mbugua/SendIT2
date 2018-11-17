@@ -57,20 +57,20 @@ On the terminal type `export FLASK_APP=run.py` and type enter. Run `flask run`
 
 #### Parcel Data
             
-        `   "parcel_name" 	 : "Leather Sofa Set",
+            "parcel_name" 	 : "Leather Sofa Set",
 			"parcel_weight"  : "150kg",
 			"pick_location"  : "Survey",
 			"destination" 	 : "Wendani",
 			"consignee_name" : "Mark Mbugua",
 			"consignee_no"   : "0712340908",
 			"order_status"   : "order_status",
-            "user_id"        :     1   `
+            "user_id"        :     1   
 
 #### User Data
             
-`            'user_name'   : "Markman",
+             'user_name'   : "Markman",
              'user_email'  :  "mbugua@gmail.com",
-             'password'    :    "markman"      `
+             'password'    :    "markman"      
                                                 
 ## Testing
 
@@ -83,4 +83,4 @@ To test run: `pytest`
 * Flask RESTful
 
 ### Credits
-Coypright (c) [Mark Mbugua] (https://github.com/Mark9Mbugua)
+Coypright (c) [Mark Mbugua](https://github.com/Mark9Mbugua)
