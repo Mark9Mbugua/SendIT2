@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/Mark9Mbugua/SendIT2.svg?branch=ch-add-travisci-%23161952570)](https://travis-ci.org/Mark9Mbugua/SendIT2)
 
-[![Coverage Status](https://coveralls.io/repos/github/Mark9Mbugua/SendIT2/badge.svg?branch=ch-implement-feedback-#162030600)](https://coveralls.io/github/Mark9Mbugua/SendIT2?branch=ch-integrate-coveralls-#161991046)
+[![Coverage Status](https://coveralls.io/repos/github/Mark9Mbugua/SendIT2/badge.svg?branch=bg-coveralls-not-working-%23161997634)](https://coveralls.io/github/Mark9Mbugua/SendIT2?branch=bg-coveralls-not-working-%23161997634)
 
 SendIT is a courier service that helps users deliver parcels to different destinations. SendIT provides courier quotes based on weight categories.
 
@@ -10,7 +10,7 @@ SendIT is a courier service that helps users deliver parcels to different destin
 ## Getting Started
 Clone the repo from GitHub:
     
-    `git clone :https://github.com/Mark9Mbugua/SendIT2.git`
+    git clone :https://github.com/Mark9Mbugua/SendIT2.git
 
 Navigate to root folder
     `cd SendIT2`
