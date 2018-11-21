@@ -1,5 +1,6 @@
 from ....db_config import init_db
 from flask import jsonify, make_response
+from passlib.hash import pbkdf2_sha256 as sha256
 
 
 class User():
@@ -55,3 +56,11 @@ class User():
                 {
                     'Message': "Username or Password dont meet starndards" +str(error)
                 }), 401)
+
+    @staticmethod
+    def generate_hash(password):
+        return sha256.hash(password)
+    
+    @staticmethod
+    def verify_hash(password, hash):
+        return sha256.verify(password, hash)
