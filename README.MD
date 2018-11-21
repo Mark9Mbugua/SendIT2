@@ -69,7 +69,7 @@ On the terminal type `export FLASK_APP=run.py` and type enter. Run `flask run`
 #### User Data
             
         "user_name"   : "Markman",
-        "user_email"  :  "mbugua@gmail.com",
+        "email"  :  "mbugua@gmail.com",
         "password"    :    "markman"      
                                                 
 ## Testing
