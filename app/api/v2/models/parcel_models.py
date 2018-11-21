@@ -14,11 +14,11 @@ class Parcel():
             result[field] = parcel[index]
         return result
 
-    def create(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost):
+    def create(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id):
         cur = self.db.cursor()
         query = """INSERT INTO parcels (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id)
-                VALUES (%s, %s, %s, %s,%s, %s,%s, %s)"""
-        content = (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost)
+                VALUES (%s, %s, %s, %s,%s, %s,%s, %s, %s)"""
+        content = (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id)
         cur.execute(query, content)
         self.db.commit()
         self.db.close()
@@ -26,15 +26,22 @@ class Parcel():
 
     def getParcels(self):
         cur = self.db.cursor()
-        query = """SELECT parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost FROM parcels"""
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost FROM parcels"""
         cur.execute(query)
         data = cur.fetchall()
         return self.serializer(data)
 
     def getParcel(self, parcel_id):
         cur = self.db.cursor()
-        query = """SELECT parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost
         FROM parcels WHERE parcel_id = %s""", (parcel_id, )
         cur.execute(query)
         data = cur.fetchall()
         return self.serializer(data)
+
+    #cancel order status
+    def cancelParcel(self, parcel_id):
+        cur = self.db.cursor()
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost
+        FROM parcels WHERE parcel_id = %s""", (parcel_id, )
+        cur.execute(query)

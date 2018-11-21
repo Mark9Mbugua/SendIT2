@@ -8,7 +8,6 @@ def make_app(config_name):
     app.config['JWT_SECRET_KEY'] = 'a-big-secret'
     JWTManager(app)
     init_db()
-    # destroy_tables()
     create_tables()
     app.register_blueprint(v2)
 
