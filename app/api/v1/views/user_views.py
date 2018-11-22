@@ -23,11 +23,11 @@ class Register(Resource):
     def post(self):
         data = request.get_json()
         user_name = data['user_name']
-        user_email = data['user_email']
+        email = data['email']
         password = data['password']
         res = self.usr.validate_user_data(user_name, password)
         if res == True:
-            resp = self.usr.create(user_name, user_email, password)
+            resp = self.usr.create(user_name, email, password)
             return make_response(jsonify(
                 {
                     'Message' : 'Success',

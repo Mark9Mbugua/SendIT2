@@ -55,6 +55,7 @@ def tables():
 		consignee_no varchar NOT NULL,
         order_status varchar (25) NOT NULL,
 	    cost varchar NOT NULL,
+		user_id varchar REFERENCES users(user_id) NOT NULL,
         date_created timestamp with time zone DEFAULT ('now'::text)::date
 	    )"""
 

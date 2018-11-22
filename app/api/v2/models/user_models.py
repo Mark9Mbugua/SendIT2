@@ -9,7 +9,7 @@ class User():
         self.db = init_db()
     
     def serializer(self, user):
-        user_fields = ('user_name', 'email', 'role', 'password')
+        user_fields = ('user_id', 'user_name', 'email', 'role', 'password')
         result = dict()
         for index, field in enumerate(user_fields):
             result[field] = user[index]
@@ -23,21 +23,25 @@ class User():
         cur.execute(query, content)
         self.db.commit()
         self.db.close()
-        return self.serializer(content)
+        return True
 
 
     def login(self, user_name, password):
         cur = self.db.cursor()
-        cur.execute("""SELECT user_name, email, role, password FROM users WHERE user_name = %s and password = %s""", (user_name, password))
-        db_user = cur.fetchone()
-        return self.serializer(db_user)
+        cur.execute("""SELECT user_id, user_name, email, role, password FROM users WHERE user_name = %s""", (user_name, ))
+        user= cur.fetchone()
+        if cur.rowcount == 1: 
+            data = self.serializer(user)
+            #if self.verify_hash(password, data["password"]) is True:  
+            
+            return data
 
     def userIsValid(self, user_name):
         cur = self.db.cursor()
-        cur.execute("""SELECT user_name, email, role, password FROM users WHERE user_name = %s""", (user_name, ))
+        cur.execute("""SELECT user_id, user_name, email, role, password FROM users WHERE user_name = %s""", (user_name, ))
         data = cur.fetchall()
         for user in data:
-            if user[0] == user_name:
+            if user[1] == user_name:
                 return True
         
     def validate_user_data(self, user_name, password):
@@ -47,7 +51,7 @@ class User():
             elif len(password) < 5:
                 return "Password should be at least 5 characters"
             elif " " in password:
-                return "Password should be one word, no sparceles"
+                return "Password should be one word, no spaces"
             else:
                 return True
 

@@ -26,19 +26,19 @@ class Register(Resource):
         password = self.usr.generate_hash(data['password'])
         res = self.usr.validate_user_data(user_name, password)
         if res == True:
-            try:
                 resp = self.usr.register(user_name, email, role, password)
-                return make_response(jsonify(
-                    {
-                        'Message' : 'Signed up successfully',
-                        'status'  : 'ok',
-                        'Data' : resp
-                    }), 201)
+                if resp == True:
+                    return make_response(jsonify(
+                        {
+                            'Message' : 'Signed up successfully',
+                            'status'  : 'ok',
+
+                        }), 201)
             
-            except:
-                return make_response(jsonify(
+        else:
+            return make_response(jsonify(
                     {
-                        'Message' : res
+                        'Message' : 'Error in signin up please try again'
                         
                     }), 400)
 
@@ -59,15 +59,53 @@ class Login(Resource):
 
         if self.usr.userIsValid(user_name) == True:
             user = self.usr.login(user_name, password)
-            access_token = create_access_token(identity = data['user_name'])
-            refresh_token = create_refresh_token(identity = data['user_name'])
-            
+            access_token = create_access_token(identity = user_name)
+            refresh_token = create_refresh_token(identity = password)
+                
             return make_response(jsonify({
 
-                'Message' : 'You are now logged in!',
-                'access_token' : access_token,
-                'refresh_token' : refresh_token
-            }), 200)
+                    'Message' : 'You are now logged in!',
+                    'access_token' : access_token,
+                    'refresh_token' : refresh_token,
+                    'User' : user
+                }), 200)
+        
+        else:
+            return make_response(jsonify({
 
-           
+                        "Message" : 'Enter correct Username or Password'
+                    }), 400)
+                
+            
+        
 
+    # def post(self):
+    #    data = request.get_json() or {}
+
+    #    if data["email"].find("@") < 2:
+    #        message = 'Incorrect email format'
+    #        payload = {"Status": "Failed", "Message": message}
+    #        return make_response(jsonify(payload), 400)
+
+
+
+    #    password = data['password'].strip()
+    #    if not (re.match("^[a-zA-Z0-9_]*$", password)):
+    #        message = 'Check your password.'
+    #        payload = {"Status": "Failed", "Message": message}
+    #        return make_response(jsonify(payload), 400)
+
+
+    #    user = UserModel()
+    #    email = data["email"]
+    #    password = data["password"]
+    #    auth = user.user_login(email)
+
+    #    if auth:
+    #        access_token = create_access_token(identity=email)
+    #        return make_response(jsonify({"message": "Successful login",
+    #        "token": access_token
+    #    }), 200)
+    #    return make_response(jsonify({
+    #    "message": "Try again",
+    #    }), 400)

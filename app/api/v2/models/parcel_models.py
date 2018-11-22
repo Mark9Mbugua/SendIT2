@@ -8,7 +8,7 @@ class Parcel():
 
     def serializer(self, parcel):
         parcel_fields = ('parcel_name', 'parcel_weight', 'pick_location',
-                         'destination', 'consignee_name', 'consignee_no', 'order_status', 'cost')
+                         'destination', 'consignee_name', 'consignee_no', 'order_status', 'cost', 'user_id')
         result = dict()
         for index, field in enumerate(parcel_fields):
             result[field] = parcel[index]
@@ -16,7 +16,7 @@ class Parcel():
 
     def create(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost):
         cur = self.db.cursor()
-        query = """INSERT INTO parcels (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost)
+        query = """INSERT INTO parcels (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id)
                 VALUES (%s, %s, %s, %s,%s, %s,%s, %s)"""
         content = (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost)
         cur.execute(query, content)
