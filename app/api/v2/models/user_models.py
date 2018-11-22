@@ -32,9 +32,8 @@ class User():
         user= cur.fetchone()
         if cur.rowcount == 1: 
             data = self.serializer(user)
-            #if self.verify_hash(password, data["password"]) is True:  
-            
-            return data
+            if self.verify_hash(password, data["password"]) is True:  
+                return data
 
     def userIsValid(self, user_name):
         cur = self.db.cursor()

@@ -36,7 +36,7 @@ def destroy_tables():
 def tables():
     
 	table1 = """CREATE TABLE IF NOT EXISTS users (
-	    user_id serial PRIMARY KEY NOT NULL,
+	    user_id SERIAL PRIMARY KEY UNIQUE NOT NULL,
 	    user_name varchar (50) NOT NULL,
 	    email varchar (50) NOT NULL,
 	    role varchar (25) NOT NULL,
@@ -46,7 +46,7 @@ def tables():
 
 	
 	table2 = """CREATE TABLE IF NOT EXISTS parcels (
-	    parcel_id serial PRIMARY KEY NOT NULL,
+	    parcel_id SERIAL PRIMARY KEY UNIQUE NOT NULL,
 	    parcel_name varchar (250) NOT NULL,
 		parcel_weight varchar NOT NULL,
 		pick_location varchar (150) NOT NULL,
@@ -55,9 +55,9 @@ def tables():
 		consignee_no varchar NOT NULL,
         order_status varchar (25) NOT NULL,
 	    cost varchar NOT NULL,
-		user_id varchar REFERENCES users(user_id) NOT NULL,
-        date_created timestamp with time zone DEFAULT ('now'::text)::date
-	    )"""
+		user_id INTEGER NOT NULL,
+        FOREIGN KEY (user_id) REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE
+        )"""
 
 	queries = [table1, table2]
 	return queries

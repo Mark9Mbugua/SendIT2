@@ -11,6 +11,7 @@ class ParcelView(Resource):
         self.parcel = Parcel()
     @jwt_required
     def post(self):
+        current_user = get_jwt_identity()
         data = request.get_json()
         parcel_name = data['parcel_name']
         parcel_weight = data['parcel_weight'] 
@@ -20,7 +21,7 @@ class ParcelView(Resource):
         consignee_no = data['consignee_no']
         order_status = data['order_status']
         cost = data['cost']
-        user_id = data['user_id']
+        user_id = current_user["user_id"]
         
         result = self.parcel.create(parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id)
 
