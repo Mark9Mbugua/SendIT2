@@ -1,6 +1,7 @@
 from ....db_config import init_db
 from flask import jsonify, make_response
 from passlib.hash import pbkdf2_sha256 as sha256
+import itertools
 
 
 class User():
@@ -15,16 +16,24 @@ class User():
             result[field] = user[index]
         return result
     
+    def second_serializer(self, user_details):
+        user_id, user_name, email, role, password = user_details
+        result = dict(user_id = user_id, user_name = user_name, email = email, role = role, password = password)
+
+        return result
+
+    
     def register(self, user_name, email, role, password):
         cur = self.db.cursor()
         query = """INSERT INTO users (user_name, email, role, password)
-                VALUES (%s, %s, %s, %s)"""
+                VALUES (%s, %s, %s, %s) RETURNING user_id"""
         content = (user_name, email, role, password)
         cur.execute(query, content)
+        user_id = cur.fetchone()
         self.db.commit()
         self.db.close()
-        return True
-
+        output = self.serializer(tuple(itertools.chain(user_id, content)))
+        return output
 
     def login(self, user_name, password):
         cur = self.db.cursor()
@@ -59,6 +68,21 @@ class User():
                 {
                     'Message': "Username or Password dont meet starndards" +str(error)
                 }), 401)
+    
+    
+    def getOneUser(self, user_id):
+        cur = self.db.cursor() 
+        cur.execute("""SELECT user_id, user_name, email, role, password FROM users WHERE user_id = '{}'""" .format(user_id))
+        data = cur.fetchone()
+        return self.second_serializer(data)
+
+    def getUserName(self, user_name):
+        cur = self.db.cursor() 
+        query = """SELECT  user_id, user_name, email, role, password FROM users WHERE user_name = '{}';""".format(user_name)
+        cur.execute(query)
+        data = cur.fetchone()
+        user_dict = {data[0]: [data[1], data[2], data[3], data[4]],}
+        return user_dict
 
     @staticmethod
     def generate_hash(password):
