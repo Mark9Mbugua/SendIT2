@@ -3,7 +3,7 @@ from flask import jsonify, make_response, request
 
 from ..models.user_models import User
 
-class UserView(Resource):
+class Register(Resource):
     
     # initialize the user class
     def __init__(self):
@@ -41,7 +41,7 @@ class UserView(Resource):
                 
             }), 400)
 
-class SpecificUser(Resource):
+class Login(Resource):
     
     # initialize the user class
     def __init__(self):
