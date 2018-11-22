@@ -23,6 +23,7 @@ class Register(Resource):
         data = parser.parse_args()
         user_name = data['user_name']
         email = data['email']
+        is_valid=validate_email(email)
         role = data['role']
         password = self.usr.generate_hash(data['password'])
         res = self.usr.validate_user_data(user_name, password)

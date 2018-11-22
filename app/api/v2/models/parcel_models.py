@@ -29,6 +29,7 @@ class Parcel():
 
     def getParcels(self):
         cur = self.db.cursor()
+
         query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
         cur.execute(query)
         data = cur.fetchall()
@@ -50,3 +51,4 @@ class Parcel():
         self.db.commit()
         return True
         self.db.close()
+
