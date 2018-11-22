@@ -34,6 +34,7 @@ class Register(Resource):
                         {
                             'Message' : 'Signed up successfully',
                             'status'  : 'ok',
+                            'Data' : resp
 
                         }), 201)
             
