@@ -1,5 +1,6 @@
 from ....db_config import init_db
 import itertools
+import psycopg2
 
 
 class Parcel():
@@ -24,18 +25,19 @@ class Parcel():
         cur.execute(query, content)
         parcel_id = cur.fetchone()
         self.db.commit()
-        self.db.close()
+        cur.close()
         return self.serializer(tuple(itertools.chain(parcel_id, content)))
 
-    def getParcels(self):
+    def getAllParcels(self):
         cur = self.db.cursor()
-
         query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
         cur.execute(query)
         data = cur.fetchall()
+        cur.close()
         return self.serializer(data)
+        
 
-    def getParcel(self, parcel_id):
+    def getOneParcel(self, parcel_id):
         cur = self.db.cursor()
         query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id
         FROM parcels WHERE parcel_id = {}""".format(parcel_id)
@@ -46,9 +48,16 @@ class Parcel():
     #update destination
     def updateParcel(self, destination, parcel_id, user_id):
         cur = self.db.cursor()
-        query = """UPDATE parcels SET destination = '{}' WHERE user_id = '{}' AND parcel_id = '{}'""".format(destination, user_id, parcel_id)
+        query = """UPDATE parcels SET destination = '{}' WHERE parcel_id = '{}' AND user_id = '{}' RETURNING destination""".format(destination, parcel_id, user_id)
         cur.execute(query)
         self.db.commit()
-        return True
-        self.db.close()
+        dest = cur.fetchone()
+        cur.close()
+        destination = dest
+        new_dest = dict(destination=destination)
+        return new_dest
+        
 
+    def changeParcelStatus(self, parcel_id, order_status):
+        cur = self.db.cursor()
+        cur.execute = ""
