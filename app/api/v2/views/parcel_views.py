@@ -33,6 +33,24 @@ class ParcelView(Resource):
                 'Response': 'Parcel Created successfully',
                 'Data': result
             }), 201)
+    
+    def get(self):
+        all_parcels = self.parcel.getAllParcels()
+        if all_parcels is not None:
+            
+            return make_response(jsonify(
+                {
+                    'Response': "Here are all the parcels",
+                    'status': "OK",
+                    'Data': all_parcels
+                }), 200)
+        
+        return make_response(jsonify({
+            'Response' : "Parcels not found",
+
+        }), 404)
+        
+
 
 
 class UpdateParcel(Resource):
@@ -72,3 +90,37 @@ class UpdateParcel(Resource):
                     'Response': 'User not authorized to make this request'
 
                 }), 400)
+
+
+class UserParcels(Resource):
+    
+    def __init__(self):
+        self.parcel = Parcel()
+        self.user = User()
+    
+    @jwt_required
+    def get(self, user_id):
+        current_user = get_jwt_identity()
+        user_id = current_user['user_id']
+
+        if current_user["role"] == "User":
+            user_parcels = self.parcel.getUserParcels(user_id)
+            if user_parcels is not None:
+                return make_response(jsonify(
+                    {
+                        'Response': "User's parcels ready",
+                        'Data': user_parcels
+                    }), 200)
+       
+            return make_response(jsonify(
+                {
+                    'Response': 'User not found'
+            
+                }), 404)
+        
+        return make_response(jsonify(
+                {
+                    'Response': 'User not authorized to make this request'
+
+                }), 400)
+

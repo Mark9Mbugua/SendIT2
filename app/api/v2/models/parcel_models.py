@@ -15,7 +15,19 @@ class Parcel():
         print(parcel)
         for index, field in enumerate(parcel_fields):
             result[field] = parcel[index]
-        return result
+        return result  
+    
+    def second_serializer(self, parcel_data):
+        # coverting data retrived from the database into objects
+        parcels = []
+        for index, parcel_value in enumerate(parcel_data):
+            parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id = parcel_value
+            parcel = dict(parcel_id=parcel_id, parcel_name=parcel_name, parcel_weight=parcel_weight, pick_location=pick_location, destination=destination,
+                        consignee_name=consignee_name, consignee_no=consignee_no, order_status=order_status, cost=cost, user_id=user_id)
+            parcels.append(parcel)
+        
+        return parcels
+
 
     def create(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id):
         cur = self.db.cursor()
@@ -28,13 +40,21 @@ class Parcel():
         cur.close()
         return self.serializer(tuple(itertools.chain(parcel_id, content)))
 
-    def getAllParcels(self):
+    def getUserParcels(self, user_id):
+        user_parcels = []
         cur = self.db.cursor()
         query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
         cur.execute(query)
         data = cur.fetchall()
+        serial_data = self.second_serializer(data)
+        print(serial_data)
         cur.close()
-        return self.serializer(data)
+        for parcel in serial_data:
+            if parcel['user_id'] == user_id:
+                user_parcels.append(parcel)
+
+        print(user_parcels)
+        return user_parcels
         
 
     def getOneParcel(self, parcel_id):
@@ -56,8 +76,11 @@ class Parcel():
         destination = dest
         new_dest = dict(destination=destination)
         return new_dest
-        
-
-    def changeParcelStatus(self, parcel_id, order_status):
+    
+    def getAllParcels(self):
         cur = self.db.cursor()
-        cur.execute = ""
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
+        cur.execute(query)
+        data = cur.fetchall()
+        return self.second_serializer(data)
+        
