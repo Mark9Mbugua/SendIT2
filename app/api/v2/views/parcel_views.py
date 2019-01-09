@@ -49,8 +49,24 @@ class ParcelView(Resource):
             'Response' : "Parcels not found",
 
         }), 404)
-        
 
+class ParcelList(Resource):
+    def __init__(self):
+        self.parcel = Parcel()
+    
+    def get(self, parcel_id):
+        parcel = self.parcel.getOneParcel(parcel_id)
+        if parcel:
+            return make_response(jsonify({
+                'Response': "Parcel Ready",
+                'Data': parcel,
+                'status': 'OK'
+            }), 200)
+        
+        return make_response(jsonify({
+            'Response' : "Parcels not found",
+
+        }), 404)
 
 
 class UpdateParcel(Resource):
