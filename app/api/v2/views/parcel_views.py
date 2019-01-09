@@ -34,21 +34,31 @@ class ParcelView(Resource):
                 'Data': result
             }), 201)
     
+    @jwt_required
     def get(self):
-        all_parcels = self.parcel.getAllParcels()
-        if all_parcels is not None:
+        current_user = get_jwt_identity()
+        if current_user ['role'] == "Admin":
+            all_parcels = self.parcel.getAllParcels()
+            if all_parcels is not None:
+                    
+                return make_response(jsonify(
+                    {
+                        'Response': "Here are all the parcels",
+                        'status': "OK",
+                        'Data': all_parcels
+                    }), 200)
             
-            return make_response(jsonify(
-                {
-                    'Response': "Here are all the parcels",
-                    'status': "OK",
-                    'Data': all_parcels
-                }), 200)
-        
-        return make_response(jsonify({
-            'Response' : "Parcels not found",
+            return make_response(jsonify({
+                'Response' : "Parcels not found",
 
-        }), 404)
+            }), 404)
+            
+        return make_response(jsonify({
+                'Response' : "This type of user is not authorized to undertake this action",
+
+            }), 401)
+        
+        
 
 class ParcelList(Resource):
     def __init__(self):
