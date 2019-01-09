@@ -7,10 +7,10 @@ class Register(Resource):
     
     # initialize the user class
     def __init__(self):
-        self.usr = User()
+        self.user = User()
     
     def get(self):
-        users = self.usr.logins()
+        users = self.user.logins()
 
         return make_response(jsonify(
             {
@@ -25,9 +25,9 @@ class Register(Resource):
         user_name = data['user_name']
         email = data['email']
         password = data['password']
-        res = self.usr.validate_user_data(user_name, password)
+        res = self.user.validate_user_data(user_name, password)
         if res == True:
-            resp = self.usr.create(user_name, email, password)
+            resp = self.user.create(user_name, email, password)
             return make_response(jsonify(
                 {
                     'Message' : 'Success',
@@ -45,7 +45,7 @@ class Login(Resource):
     
     # initialize the user class
     def __init__(self):
-        self.usr = User()
+        self.user = User()
     
     #signin a user
     def post(self):
@@ -53,9 +53,9 @@ class Login(Resource):
         user_name = data['user_name']
         password = data['password']
 
-        if self.usr.userIsValid(user_name) == True:
+        if self.user.userIsValid(user_name) == True:
 
-            res = self.usr.login(user_name, password)
+            res = self.user.login(user_name, password)
 
             return res
 
