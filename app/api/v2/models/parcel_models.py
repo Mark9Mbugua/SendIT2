@@ -10,7 +10,7 @@ class Parcel():
 
     def serializer(self, parcel):
         parcel_fields = ('parcel_id','parcel_name', 'parcel_weight', 'pick_location',
-                         'destination', 'consignee_name', 'consignee_no', 'order_status', 'cost', 'user_id')
+                         'destination', 'present_location', 'consignee_name', 'consignee_no', 'order_status', 'cost', 'user_id')
         result = dict()
         print(parcel)
         for index, field in enumerate(parcel_fields):
@@ -21,19 +21,19 @@ class Parcel():
         # coverting data retrived from the database into objects
         parcels = []
         for index, parcel_value in enumerate(parcel_data):
-            parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id = parcel_value
-            parcel = dict(parcel_id=parcel_id, parcel_name=parcel_name, parcel_weight=parcel_weight, pick_location=pick_location, destination=destination,
-                        consignee_name=consignee_name, consignee_no=consignee_no, order_status=order_status, cost=cost, user_id=user_id)
+            parcel_id, parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id = parcel_value
+            parcel = dict(parcel_id=parcel_id, parcel_name=parcel_name, parcel_weight=parcel_weight, pick_location=pick_location, destination=destination, 
+                        present_location=present_location, consignee_name=consignee_name, consignee_no=consignee_no, order_status=order_status, cost=cost, user_id=user_id)
             parcels.append(parcel)
         
         return parcels
 
 
-    def create(self, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id):
+    def create(self, parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id):
         cur = self.db.cursor()
-        query = """INSERT INTO parcels (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id)
-                VALUES (%s, %s, %s, %s,%s, %s,%s, %s, %s) RETURNING parcel_id"""
-        content = (parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id)
+        query = """INSERT INTO parcels (parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id)
+                VALUES (%s, %s, %s, %s,%s, %s,%s, %s, %s, %s) RETURNING parcel_id"""
+        content = (parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id)
         cur.execute(query, content)
         parcel_id = cur.fetchone()
         self.db.commit()
@@ -43,7 +43,7 @@ class Parcel():
     def getUserParcels(self, user_id):
         user_parcels = []
         cur = self.db.cursor()
-        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
         cur.execute(query)
         data = cur.fetchall()
         serial_data = self.second_serializer(data)
@@ -59,7 +59,7 @@ class Parcel():
 
     def getOneParcel(self, parcel_id):
         cur = self.db.cursor()
-        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id
         FROM parcels WHERE parcel_id = {}""".format(parcel_id)
         cur.execute(query)
         data = cur.fetchone()
@@ -79,8 +79,19 @@ class Parcel():
     
     def getAllParcels(self):
         cur = self.db.cursor()
-        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
+        query = """SELECT parcel_id, parcel_name, parcel_weight, pick_location, destination, present_location, consignee_name, consignee_no, order_status, cost, user_id FROM parcels"""
         cur.execute(query)
         data = cur.fetchall()
         return self.second_serializer(data)
+    
+    def updateLocation(self, present_location, parcel_id, user_id):
+        cur = self.db.cursor()
+        query = """UPDATE parcels SET present_location = '{}' WHERE parcel_id = '{}' AND user_id  = '{}' RETURNING present_location""".format(present_location, parcel_id, user_id)
+        cur.execute(query)
+        self.db.commit()
+        locale =  cur.fetchone()
+        cur.close()
+        location = locale
+        new_location = dict(location = location)
+        return new_location
         
