@@ -19,6 +19,7 @@ class ParcelView(Resource):
         parcel_weight = data['parcel_weight']
         pick_location = data['pick_location']
         destination = data['destination']
+        present_location = data['present_location']
         consignee_name = data['consignee_name']
         consignee_no = data['consignee_no']
         order_status = data['order_status']
@@ -26,7 +27,7 @@ class ParcelView(Resource):
         user_id = current_user["user_id"]
 
         result = self.parcel.create(parcel_name, parcel_weight, pick_location,
-                                    destination, consignee_name, consignee_no, order_status, cost, user_id)
+                                    destination, present_location, consignee_name, consignee_no, order_status, cost, user_id)
 
         return make_response(jsonify(
             {
@@ -142,6 +143,44 @@ class UserParcels(Resource):
                 {
                     'Response': 'User not found'
             
+                }), 404)
+        
+        return make_response(jsonify(
+                {
+                    'Response': 'User not authorized to make this request'
+
+                }), 400)
+
+class UpdateLocation(Resource):
+
+    def __init__(self):
+        self.parcel = Parcel()
+        self.user = User()
+
+    @jwt_required
+    def put(self, parcel_id):
+        current_user = get_jwt_identity()
+        user_id = current_user['user_id']
+
+        if current_user["role"] == "Admin":
+            parser = reqparse.RequestParser()
+            parser.add_argument('present_location', help="Kindly provide parcel's present location ", required=True)
+            data = parser.parse_args()
+            present_location = data['present_location']
+            parcel_id = int(parcel_id)
+            update_location = self.parcel.updateLocation(present_location, parcel_id, user_id)
+            
+            if parcel_id:
+                return make_response(jsonify(
+                        {
+                            'Response': "Location updated successfully",
+                            'Data': update_location
+                        }), 200)
+
+            return make_response(jsonify(
+                {
+                    'Response': 'Parcel not found'
+
                 }), 404)
         
         return make_response(jsonify(

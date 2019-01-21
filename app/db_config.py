@@ -51,6 +51,7 @@ def tables():
 		parcel_weight varchar NOT NULL,
 		pick_location varchar (150) NOT NULL,
 		destination varchar (150) NOT NULL,
+		present_location varchar (150) NOT NULL,
 		consignee_name varchar (100) NOT NULL,
 		consignee_no varchar NOT NULL,
         order_status varchar (25) NOT NULL,
