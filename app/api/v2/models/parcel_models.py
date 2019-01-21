@@ -94,4 +94,15 @@ class Parcel():
         location = locale
         new_location = dict(location = location)
         return new_location
+    
+    def updateOrderStatus(self, order_status, parcel_id, user_id):
+        cur = self.db.cursor()
+        query = """UPDATE parcels SET order_status = '{}' WHERE parcel_id = '{}' AND user_id = '{}' RETURNING order_status""".format(order_status, parcel_id, user_id)
+        cur.execute(query)
+        self.db.commit()
+        status = cur.fetchone()
+        cur.close()
+        order_status = status
+        new_status = dict(order_status=order_status)
+        return new_status
         

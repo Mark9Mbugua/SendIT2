@@ -188,4 +188,42 @@ class UpdateLocation(Resource):
                     'Response': 'User not authorized to make this request'
 
                 }), 400)
+    
+class UpdateOrderStatus(Resource):
+
+    def __init__(self):
+        self.parcel = Parcel()
+        self.user = User()
+
+    @jwt_required
+    def put(self, parcel_id):
+        current_user = get_jwt_identity()
+        user_id = current_user['user_id']
+
+        if current_user["role"] == "Admin":
+            parser = reqparse.RequestParser()
+            parser.add_argument('order_status', help="Kindly provide parcel's latest order status ", required=True)
+            data = parser.parse_args()
+            order_status = data['order_status']
+            parcel_id = int(parcel_id)
+            update_order_status = self.parcel.updateOrderStatus(order_status, parcel_id, user_id)
+            
+            if parcel_id:
+                return make_response(jsonify(
+                        {
+                            'Response': "Order Status updated successfully",
+                            'Data': update_order_status
+                        }), 200)
+
+            return make_response(jsonify(
+                {
+                    'Response': 'Parcel not found'
+
+                }), 404)
+        
+        return make_response(jsonify(
+                {
+                    'Response': 'User not authorized to make this request'
+
+                }), 400)
 
