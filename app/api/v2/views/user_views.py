@@ -4,6 +4,7 @@ from flask_jwt_extended import (create_access_token, create_refresh_token, jwt_r
                                             jwt_refresh_token_required, get_jwt_identity, get_raw_jwt)
 
 from ..models.user_models import User
+import re
 
 class Register(Resource):
     
@@ -23,9 +24,10 @@ class Register(Resource):
         user_name = data['user_name']
         email = data['email']
         role = data['role']
-        password = self.user.generate_hash(data['password'])
+        password = data['password']
         res = self.user.validate_user_data(user_name, password)
         if res == True:
+                password = self.user.generate_hash(data['password'])
                 resp = self.user.register(user_name, email, role, password)
                 return make_response(jsonify(
                     {
@@ -37,7 +39,7 @@ class Register(Resource):
         
         return make_response(jsonify(
                 {
-                    'Message' : 'Kindly check if username or password is correct and in the required format'
+                    'Message' : res
                     
                 }), 400)
 
@@ -57,18 +59,23 @@ class Login(Resource):
         password = data['password']
 
         if self.user.userIsValid(user_name) == True:
-            user = self.user.login(user_name, password)
-            access_token = create_access_token(identity = user)
-                
+            if self.user.password_is_valid(user_name, password) == True:
+                user = self.user.login(user_name, password)
+                access_token = create_access_token(identity = user)
+                    
+                return make_response(jsonify({
+
+                        'Message' : 'You are now logged in!',
+                        'access_token' : access_token
+
+                    }), 200)
+            
             return make_response(jsonify({
 
-                    'Message' : 'You are now logged in!',
-                    'access_token' : access_token
-
-                }), 200)
+                "Message" : 'Enter correct password'
+            }), 400)
         
-        else:
-            return make_response(jsonify({
+        return make_response(jsonify({
 
-                        "Message" : 'Enter correct Username or Password'
-                    }), 400)
+                "Message" : 'User is not registered'
+            }), 400)

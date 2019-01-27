@@ -1,6 +1,7 @@
 from ....db_config import init_db
 import itertools
 import psycopg2
+import re
 
 
 class Parcel():
@@ -55,7 +56,73 @@ class Parcel():
 
         print(user_parcels)
         return user_parcels
+    
+    def validate_parcel_data(self, parcel_name, destination, consignee_name, pick_location, present_location, 
+                                parcel_weight, consignee_no, order_status, cost, user_id):
+        """validates parcel data"""
+        response  = True
+
+        if not re.search('^[A-Za-z]', parcel_name):
+            response = "Parcel name should start with a capital letter"
+            return response
+
+        elif not re.search('^[A-Za-z]', destination):
+            response = "Destination should start with a capital letter"
+            return response
         
+        elif not re.search('^[A-Za-z]', consignee_name):
+            response = "Consignee's name should start with a capital letter"
+            return response
+        
+        elif not re.search('^[A-Za-z]', pick_location):
+            response = "Pick-up location name should start with a capital letter"
+            return response
+
+        elif not re.search('^[A-Za-z]', present_location):
+            response = "Present location should start with a capital letter"
+            return response
+
+        elif not isinstance(cost, int):
+            response = "Cost number must be an integer"
+            return response
+
+        elif not isinstance(parcel_weight, int):
+            response = "Parcel weight must be an integer"
+            return response
+        
+        elif not isinstance(consignee_no, int):
+            response = "Consignee's number must be an integer"
+            return response
+        
+        elif not isinstance(user_id, int):
+            response = "User Id must be an integer"
+            return response
+        
+        elif not isinstance(parcel_name, str):
+            response = "Parcel number must be in letters"
+            return response
+
+        elif not isinstance(destination, str):
+            response = "Consignee's number must be in letters"
+            return response
+        
+        elif not isinstance(pick_location, str):
+            response = "Pick-up location must be in letters"
+            return response
+        
+        elif not isinstance(present_location, str):
+            response = "Present location must be in letters"
+            return response
+        
+        elif not isinstance(consignee_name, str):
+            response = "Consignee's number must be in letters"
+            return response
+        
+        elif not isinstance(order_status, str):
+            response = "Order status must be in letters"
+            return response
+
+        return response
 
     def getOneParcel(self, parcel_id):
         cur = self.db.cursor()
@@ -105,4 +172,6 @@ class Parcel():
         order_status = status
         new_status = dict(order_status=order_status)
         return new_status
+    
+
         

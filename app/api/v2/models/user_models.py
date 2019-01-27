@@ -2,6 +2,7 @@ from ....db_config import init_db
 from flask import jsonify, make_response
 from passlib.hash import pbkdf2_sha256 as sha256
 import itertools
+import re
 
 
 class User():
@@ -19,6 +20,12 @@ class User():
     def second_serializer(self, user_details):
         user_id, user_name, email, role, password = user_details
         result = dict(user_id = user_id, user_name = user_name, email = email, role = role, password = password)
+
+        return result
+    
+    def third_serializer(self, password):
+        (pwd ,) = password
+        result = dict(pwd=pwd)
 
         return result
 
@@ -51,23 +58,46 @@ class User():
         for user in data:
             if user[1] == user_name:
                 return True
-        
-    def validate_user_data(self, user_name, password):
-        try:
-            if len(user_name) < 3:
-                return "username must be more than 3 characters"
-            elif len(password) < 5:
-                return "Password should be at least 5 characters"
-            elif " " in password:
-                return "Password should be one word, no spaces"
-            else:
-                return True
+    
+    def password_is_valid(self, user_name, password):
+        """Check if password is correct"""
+        cur = self.db.cursor()
+        cur.execute("""SELECT password FROM users WHERE user_name = %s""", (user_name, ))
+        data = cur.fetchone()
+        passcode = self.third_serializer(data)
+        if self.verify_hash(password, passcode["pwd"]) is  True:
+            return True
+            
 
-        except Exception as error:
-            return make_response(jsonify(
-                {
-                    'Message': "Username or Password dont meet starndards" +str(error)
-                }), 401)
+
+    def validate_user_data(self, user_name, password):
+        """validates user data"""
+        response  = True
+        if len(user_name) < 4:
+            response = "username should have at least 3 characters"
+            return response
+
+        elif len(password) < 5:
+            response = "Password should have at least 5 characters"
+            return response
+        
+        elif " " in password:
+            response = "Password should be one word, no spaces"
+            return response
+
+        elif not re.search('[A-Z]', password):
+            response = "Password should have at least one capital letter"
+            return response
+
+        elif not re.search('[a-z]', password):
+            response = "Password should have at least one lowercase letter"
+            return response 
+        
+        elif not re.search('[0-9]', password):
+            response =  "Password should have at least one number"
+            return response
+
+        return response
     
     
     def getOneUser(self, user_id):
@@ -90,4 +120,5 @@ class User():
     
     @staticmethod
     def verify_hash(password, hash):
+        """returns True if password has been hashed"""
         return sha256.verify(password, hash)
