@@ -56,7 +56,7 @@ def tables():
 		consignee_no varchar NOT NULL,
         order_status varchar (25) NOT NULL,
 	    cost varchar NOT NULL,
-		user_id INTEGER NOT NULL,
+		user_id integer NOT NULL,
         FOREIGN KEY (user_id) REFERENCES users(user_id) ON UPDATE CASCADE ON DELETE CASCADE
         )"""
 
